@@ -1,4 +1,5 @@
-import * as main from "./index"
+import { config, lineSegment, point } from ".";
+
 var max_y: number =0;
 var max_x: number =0;
 var min_y: number =Number.MAX_VALUE;
@@ -12,18 +13,18 @@ function setMinMax(x:number, y:number){
 }
 // setMinMax(3,3)
 // console.log(max_x,max_y,min_x,min_y)
-function drawX(x: main.point){
+function drawX(x: point){
     return x.x*10;
 }
-function drawY(y: main.point){
+function drawY(y: point){
     return y.x*10;
 }
-// var p=new main.point(1,1);
+// var p=new point(1,1);
 // console.log(p.x,p.y);
 // drawX(p);
 // drawY(p);
 // console.log(p.x,p.y);
-function drawRoute(route:Array<number>,points:Array<main.point>) {
+function drawRoute(route:Array<number>,points:Array<point>) {
     console.log("<polyline stroke='red' stroke-width='0.2' fill='none' points='")
     var current=route.length-1;
     while(current!=-1){
@@ -34,10 +35,10 @@ function drawRoute(route:Array<number>,points:Array<main.point>) {
     console.log("/>");
 }
 
-function drawPoint(p:main.point, color: string) {
+function drawPoint(p:point, color: string) {
     console.log( "<circle cx='" + drawX(p) + "' cy='"+ drawY(p) +"' r='0.5' fill='"+ color + "' />");
 }
-function drawPolygon(polygon:Array<main.lineSegment>) {
+function drawPolygon(polygon:Array<lineSegment>) {
     console.log("<polygon stroke='black' stroke-width='0.1' fill='#D3D3D3'  points='");
     console.log(drawX(polygon[0].p) + "," + drawY(polygon[0].p) + " ");
     console.log(drawX(polygon[0].q) + "," + drawY(polygon[0].q) + " ");
@@ -45,12 +46,12 @@ function drawPolygon(polygon:Array<main.lineSegment>) {
 		console.log(drawX(polygon[i].q) + "," + drawY(polygon[i].q) + " ");
 	}
 }
-function drawPolygons(polygons:Array<Array<main.lineSegment>>) {
+function drawPolygons(polygons:Array<Array<lineSegment>>) {
     for(var i=0;i<polygons.length;i++){
 		drawPolygon(polygons[i]);
 	}
 }
-function nadrawPolygonsme(polygons:Array<Array<main.lineSegment>>) {
+function nadrawPolygonsme(polygons:Array<Array<lineSegment>>) {
     for(var i=0;i<polygons.length;i++){
 		drawPolygon(polygons[i]);
 	}
@@ -65,8 +66,8 @@ function drawTitle(testTitle:string, distance: number) {
     output+="</text>";
     console.log(output);
 }
-function drawGraph(graph:Array<Array<number>>, points: Array<main.point>) {
-    var plane_start=((points.length*main.config.printLevel)/points.length)*points.length;
+function drawGraph(graph:Array<Array<number>>, points: Array<point>) {
+    var plane_start=((points.length*config.printLevel)/points.length)*points.length;
     var plane_end   = plane_start+points.length;
     for(var i=plane_start;i<plane_end;i++){
 		for(var j=0;j<graph[i].length;j++){
@@ -76,7 +77,7 @@ function drawGraph(graph:Array<Array<number>>, points: Array<main.point>) {
 	}
 }
 
-function draw(testTitle:string, start:main.point, end:main.point, polygons:Array<Array<main.lineSegment>> , distance:number, points:Array<main.point>, route:Array<number>, graph:Array<Array<number>>) {
+export function draw(testTitle:string, start:point, end:point, polygons:Array<Array<lineSegment>> , distance:number, points:Array<point>, route:Array<number>, graph:Array<Array<number>>) {
     console.log("<?xml version='1.0' encoding='UTF-8' ?>");
     console.log("<svg viewBox='"+(10*min_x-5)+" "+(-10*max_y-15)+" "+((Math.abs(min_x)+Math.abs(max_x))*10+10)+" "+ ((Math.abs(min_y)+Math.abs(max_y))*10+20)+"' xmlns='http://www.w3.org/2000/svg' version='1.1'>");
     drawPolygons(polygons);
@@ -84,6 +85,6 @@ function draw(testTitle:string, start:main.point, end:main.point, polygons:Array
     drawPoint(end,"green");
     drawTitle(testTitle,distance);
     drawGraph(graph,points);
-    if(distance!=-1 && main.config.drawRoute) drawRoute(route,points);
+    if(distance!=-1 && config.drawRoute) drawRoute(route,points);
     console.log("</svg>");
 }

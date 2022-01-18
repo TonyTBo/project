@@ -1,3 +1,9 @@
+
+// import  native from "./naive";
+import { draw } from "./draw";
+import { calculateNumberOfCrossings, makeVisabilityGraph, dijkstra } from "./naive";
+
+
 export class point{
     x:number;
     y:number;
@@ -52,6 +58,55 @@ export function setConfig(argc:number,argv:string[]) {
 		}
     }
 }
+
+
+
 export function main(argc:number,argv:string[]) {
+    var max_x: number =0;
+    var max_y: number =0;
+    var min_x: number =0;
+    var min_y: number =0;
+
+    setConfig(argc, argv);
+
+    var start!: point;
+    var end!: point;
+    var testTitle!: string;
+
+    var polygons!:Array<Array<lineSegment>>;
+    var points!: Array<point>;
+
+    // readInput(start, end, testTitle, polygons, polygons);
     
+    var graph!: Array<Array<number>>;
+    var graphDistance!: Array<Array<number>>;
+
+    var route!: Array<number>;
+    var crossesNumber!: Array<Array<number>>;
+
+    var numberOfPoints = points.length;
+    var dimension: number = numberOfPoints*(config.k + 1);
+    // graph.reverse(dimension, Array<number>());
+    // graphDistance.reverse(dimension, Array<number>());
+
+    var time1 = new Date();
+    calculateNumberOfCrossings(crossesNumber, polygons, points);
+
+    var time2 = new Date();
+    makeVisabilityGraph(graph, graphDistance, crossesNumber, points);
+
+    var time3 = new Date();
+
+    var distance: number = dijkstra(graphDistance, graph, route);
+
+    var time4 = new Date();
+
+    if(config.printGraph){
+        draw(testTitle, start, end, polygons, distance, points, route, graph);
+    } else {
+        console.log(distance);
+    }
+
+
+
 }

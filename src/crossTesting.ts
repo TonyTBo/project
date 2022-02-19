@@ -1,8 +1,7 @@
 import { lineSegment, point,  } from ".";
 import { crosses } from "./naive";
 
-var numberOfSuccess: number = 0;
-var numberOfFails: number = 0;
+var numberOfSuccess: number = 0, numberOfFails: number = 0;
 
 function testing(l1: lineSegment, l2: lineSegment, shouldCross: number): void {
     var didCross = crosses(l1, l2);
@@ -27,5 +26,8 @@ function main(){
     testing(new lineSegment(new point(0, 0), new point(1, 1)), new lineSegment(new point(0, 1), new point(1, 0)), 4);
     testing(new lineSegment(new point(1, 1), new point(2, 0)), new lineSegment(new point(1, 0), new point(8, 7)), 4);
 
-    console.log(`number of fails: ${numberOfFails} --- number of success: ${numberOfSuccess}`)    
+    console.log(`number of fails: ${numberOfFails} --- number of success: ${numberOfSuccess}`);
+    return 0;    
 }
+
+main();

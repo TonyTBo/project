@@ -1,21 +1,23 @@
 
 // import  native from "./naive";
-import { draw } from "./draw";
-import { calculateNumberOfCrossings, makeVisabilityGraph, dijkstra } from "./naive";
+import { draw, setMinMax } from "./draw";
+import { calculateNumberOfCrossings, makeVisabilityGraph, dijkstra, readInput } from "./naive";
 
-
+//point type for holding a coordinate 
 export class point{
     x:number;
     y:number;
     public constructor(x:number,y:number){
         this.x=x;
         this.y=y;
+        setMinMax(x, y)
     }
     compare(other:point) {
         return this.x==other.x && this.y==other.y;
     }
 }
 
+//linesegment type holding two points
 export class lineSegment{
     p:point;
     q:point;
@@ -28,6 +30,7 @@ export class lineSegment{
         ||(this.p.compare(other.q)&&this.q.compare(other.p))
     }
 }
+
 export class Config{
     printGraph : boolean=false;
     drawRoute : boolean=true;
@@ -38,7 +41,7 @@ export class Config{
     }
 }
 
-export var config=new Config();
+export var config = new Config();
 
 export function setConfig(argc:number,argv:string[]) {
     for(var i = 1 ; i < argc ; i++ ){
@@ -59,54 +62,73 @@ export function setConfig(argc:number,argv:string[]) {
     }
 }
 
+function getTime(start: Date, end: Date){
+    return (end.getDate() - start.getDate());
+}
+
+function CreateArrayWithRows(size: number) {
+    var x = new Array(size);
+    for (var i = 0; i < size; i++) {
+    x[i] = new Array();
+    }
+    return x;
+}
+
+function createArrayWithRowAndColumm(size: number) {
+    var x = new Array(size);
+    for (var i = 0; i < size; i++) {
+    x[i] = new Array(size);
+    }
+    return x;
+}
 
 
-export function main(argc:number,argv:string[]) {
-    var max_x: number =0;
-    var max_y: number =0;
-    var min_x: number =0;
-    var min_y: number =0;
+function main(argc:number, argv:string[]) {
+    // var max_x: number =0, max_y: number =0, min_x: number =0, min_y: number =0;
 
     setConfig(argc, argv);
 
-    var start!: point;
-    var end!: point;
-    var testTitle!: string;
+    let start!: point, end!: point, testTitle!: string
 
-    var polygons!:Array<Array<lineSegment>>;
-    var points!: Array<point>;
-
-    // readInput(start, end, testTitle, polygons, polygons);
+    //Create vector for containing the linesegments of the polygons
+    let polygons!:Array<Array<lineSegment>>
     
-    var graph!: Array<Array<number>>;
-    var graphDistance!: Array<Array<number>>;
+    //Create vector for containing the points of the polygons
+    let points!: Array<point>;
 
-    var route!: Array<number>;
-    var crossesNumber!: Array<Array<number>>;
+    //Call function that parses the file input
+    readInput(start, end, testTitle, polygons, points);
 
-    var numberOfPoints = points.length;
-    var dimension: number = numberOfPoints*(config.k + 1);
-    // graph.reverse(dimension, Array<number>());
-    // graphDistance.reverse(dimension, Array<number>());
+    //Get how many points we have
+    let numberOfPoints = points.length;
 
-    var time1 = new Date();
+    //Create a two dimenstional vector for the graph
+    let dimension = numberOfPoints*(config.k+1);
+    var graph = CreateArrayWithRows(dimension);
+    let graphDistance = CreateArrayWithRows(dimension)
+
+    //Vector so we can backtrack the route
+    let route!: Array<number>
+    let crossesNumber = createArrayWithRowAndColumm(points.length)
+
+    let time1 = new Date();
+    //Call function that calculate the distance
     calculateNumberOfCrossings(crossesNumber, polygons, points);
 
-    var time2 = new Date();
+    let time2 = new Date();
     makeVisabilityGraph(graph, graphDistance, crossesNumber, points);
 
-    var time3 = new Date();
+    let time3 = new Date();
+    //The graph is constructed call dijksta to calculate the distance
+    let distance: number = dijkstra(graphDistance, graph, route);
 
-    var distance: number = dijkstra(graphDistance, graph, route);
-
-    var time4 = new Date();
-
+    let time4 = new Date();
+    //Output the distance
     if(config.printGraph){
         draw(testTitle, start, end, polygons, distance, points, route, graph);
     } else {
-        console.log(distance);
+        console.log(getTime(time1, time2) + "-" + getTime(time2, time3) + "-" + getTime(time3, time4) + "-" + distance);
     }
-
-
-
 }
+
+main(1, ["a", "b", "c"]);

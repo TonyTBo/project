@@ -5,7 +5,7 @@ var max_x: number =0;
 var min_y: number =Number.MAX_VALUE;
 var min_x: number =Number.MAX_VALUE;
 
-function setMinMax(x:number, y:number){
+export function setMinMax(x:number, y:number){
     max_y=max_y<y?y:max_y;
     max_x=max_x<x?x:max_x;
     min_y=min_y>y?y:min_y;
@@ -51,11 +51,11 @@ function drawPolygons(polygons:Array<Array<lineSegment>>) {
 		drawPolygon(polygons[i]);
 	}
 }
-function nadrawPolygonsme(polygons:Array<Array<lineSegment>>) {
-    for(var i=0;i<polygons.length;i++){
-		drawPolygon(polygons[i]);
-	}
-}
+// function nadrawPolygonsme(polygons:Array<Array<lineSegment>>) {
+//     for(var i=0;i<polygons.length;i++){
+// 		drawPolygon(polygons[i]);
+// 	}
+// }
 function drawTitle(testTitle:string, distance: number) {
     var output="<text x='0' y='";
     output+=(-10*max_y-5);
@@ -66,6 +66,7 @@ function drawTitle(testTitle:string, distance: number) {
     output+="</text>";
     console.log(output);
 }
+
 function drawGraph(graph:Array<Array<number>>, points: Array<point>) {
     var plane_start=((points.length*config.printLevel)/points.length)*points.length;
     var plane_end   = plane_start+points.length;

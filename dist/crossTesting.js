@@ -26,4 +26,5 @@ function main() {
     console.log(`number of fails: ${numberOfFails} --- number of success: ${numberOfSuccess}`);
     return 0;
 }
+main();
 //# sourceMappingURL=crossTesting.js.map

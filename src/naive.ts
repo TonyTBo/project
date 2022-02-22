@@ -1,5 +1,5 @@
-import { lineSegment, point } from ".";
-
+import { lineSegment, point} from ".";
+import  queue   from "./Queue";
 //ok
 function readPoint(){
     let x!: number, y!: number;
@@ -127,81 +127,100 @@ function numberOfCrossings(polygons: Array<Array<lineSegment>>, l: lineSegment){
     } return n;
 }
 
-interface IStack<T> {
-    push(item: T): void;
-    pop(): T | undefined;
-    peek(): T | undefined;
-    size(): number;
-    top(): T | undefined;
-  }
+class Queue {
+    private _queue: any[];
+    private _head: number;
+    private _tail: number;
+  
+    constructor(array: any[]= []) {
+      this._queue = array;
+      this._head = 0;
+      this._tail = array.length;
+    }
+  
+    isEmpty() {
+      return this.size() === 0;
+    }
+  
+    size() {
+      return this._tail;
+    }
+  
+    enqueue(value: any) {
+      this._queue[this._tail] = value;
+      this._tail++;
+    }
+  
+    dequeue() {
+      const value = this._queue[this._head];
+      delete this._queue[this._head];
+      this._head++;
+      return value;
+    }
+  
+    peek() {
+      return this._queue[this._head];
+    }
+  
+    clear() {
+      this._queue = [];
+      this._head = 0;
+      this._tail = 0;
+    }
+}
 
-class Stack<T> implements IStack<T> {
-    private storage: T[] = [];
-  
-    constructor(private capacity: number = Infinity) {}
-  
-    push(item: T): void {
-      if (this.size() === this.capacity) {
-        throw Error("Stack has reached max capacity, you cannot add more items");
-      }
-      this.storage.push(item);
-    }
-  
-    pop(): T | undefined {
-      return this.storage.pop();
-    }
-
-    top(): T | undefined {
-        return this.storage[0];
-      }
-  
-    peek(): T | undefined {
-      return this.storage[this.size() - 1];
-    }
-  
-    size(): number {
-      return this.storage.length;
-    }
-  }
+function CreatArray(size: number){
+    return new Array(size)
+}
 
 //Implementation of dijkstra
 //Takes a graph and a start and end point in the graph
 //returns the distance
 export function dijkstra(graphDistance: Array<Array<number>>, graph: Array<Array<number>>, route: Array<number>){
-    var start = 0, end = graph.length - 1;
+    let start = 0;
+    let end = graph.length - 1;
 
-    // route.reverse(graph.length);
-
-    var visited!: Array<Boolean>;
+    //Create a vector to see if we already visited the point
+    let visited = CreatArray(graph.length)
    
-    const pq = new Stack();
+    const pq = new queue();
     // var pq!: Array<tuple: [number, number, number]>;
 
-    var tuple: [number, number, number] = [0, start, -1];
-    pq.push(tuple);
+    let tuple: [number, number, number] = [0, start, -1];
+    pq.enqueue(tuple);
 
     while(pq.size() != 0){
-        let t : [number, number, number] = tuple;
+        let t : [number, number, number] = pq.peek();
 
-        pq.pop();
+        pq.dequeue();
 
+        //How far have we travelled until now
         let distanceSoFar = -1*t[0];
+
+        //What point are we at
         let current: number = t[1];
         let whereFrom: number = t[2];
+
+        //If we already visited the current continue
         if(visited[current]) continue;
 
         route[current] = whereFrom;
         if(current == end) return distanceSoFar;
 
+        //Set the current to true in the visited vector
         visited[current] = true;
+
+        //Go through every current we have an edge to and haven't visited
         for(let i = 0; i < graph[current].length; i++){
             let next = graph[current][i];
             if(visited[next]) continue;
 
-            let newdistance = distanceSoFar + graphDistance[current][i];
+            //calculate the complete distance to that current
+            let newdistance: number = distanceSoFar + graphDistance[current][i];
+
             let newTuple: [number, number, number] = [-1*newdistance, next, current];
 
-            pq.push(newTuple);
+            pq.enqueue(newTuple);
         }
     }
     return -1;

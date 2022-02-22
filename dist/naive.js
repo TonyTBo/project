@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.calculateNumberOfCrossings = exports.makeVisabilityGraph = exports.dijkstra = exports.crosses = exports.readInput = void 0;
 const _1 = require(".");
+// import { Queue }  from "./Queue.ts";
 //ok
 function readPoint() {
     let x, y;
@@ -114,60 +115,77 @@ function numberOfCrossings(polygons, l) {
     }
     return n;
 }
-class Stack {
-    constructor(capacity = Infinity) {
-        this.capacity = capacity;
-        this.storage = [];
+class Queue {
+    constructor(array = []) {
+        this._queue = array;
+        this._head = 0;
+        this._tail = array.length;
     }
-    push(item) {
-        if (this.size() === this.capacity) {
-            throw Error("Stack has reached max capacity, you cannot add more items");
-        }
-        this.storage.push(item);
-    }
-    pop() {
-        return this.storage.pop();
-    }
-    top() {
-        return this.storage[0];
-    }
-    peek() {
-        return this.storage[this.size() - 1];
+    isEmpty() {
+        return this.size() === 0;
     }
     size() {
-        return this.storage.length;
+        return this._tail;
     }
+    enqueue(value) {
+        this._queue[this._tail] = value;
+        this._tail++;
+    }
+    dequeue() {
+        const value = this._queue[this._head];
+        delete this._queue[this._head];
+        this._head++;
+        return value;
+    }
+    peek() {
+        return this._queue[this._head];
+    }
+    clear() {
+        this._queue = [];
+        this._head = 0;
+        this._tail = 0;
+    }
+}
+function CreatArray(size) {
+    return new Array(size);
 }
 //Implementation of dijkstra
 //Takes a graph and a start and end point in the graph
 //returns the distance
 function dijkstra(graphDistance, graph, route) {
-    var start = 0, end = graph.length - 1;
-    // route.reverse(graph.length);
-    var visited;
-    const pq = new Stack();
+    let start = 0;
+    let end = graph.length - 1;
+    //Create a vector to see if we already visited the point
+    let visited = CreatArray(graph.length);
+    const pq = new Queue();
     // var pq!: Array<tuple: [number, number, number]>;
-    var tuple = [0, start, -1];
-    pq.push(tuple);
+    let tuple = [0, start, -1];
+    pq.enqueue(tuple);
     while (pq.size() != 0) {
-        let t = tuple;
-        pq.pop();
+        let t = pq.peek();
+        pq.dequeue();
+        //How far have we travelled until now
         let distanceSoFar = -1 * t[0];
+        //What point are we at
         let current = t[1];
         let whereFrom = t[2];
+        //If we already visited the current continue
         if (visited[current])
             continue;
         route[current] = whereFrom;
         if (current == end)
             return distanceSoFar;
+        //Set the current to true in the visited vector
         visited[current] = true;
+        //Go through every current we have an edge to and haven't visited
         for (let i = 0; i < graph[current].length; i++) {
             let next = graph[current][i];
             if (visited[next])
                 continue;
+            //calculate the complete distance to that current
             let newdistance = distanceSoFar + graphDistance[current][i];
             let newTuple = [-1 * newdistance, next, current];
-            pq.push(newTuple);
+            pq.enqueue(newTuple);
         }
     }
     return -1;

@@ -67,6 +67,9 @@ function CreateArrayWithRows(size) {
     }
     return x;
 }
+function CreatArray(size) {
+    return new Array(size);
+}
 function createArrayWithRowAndColumm(size) {
     var x = new Array(size);
     for (var i = 0; i < size; i++) {
@@ -91,15 +94,18 @@ function main(argc, argv) {
     var graph = CreateArrayWithRows(dimension);
     let graphDistance = CreateArrayWithRows(dimension);
     //Vector so we can backtrack the route
-    let route;
+    let route = CreatArray(graph.length);
     let crossesNumber = createArrayWithRowAndColumm(points.length);
     let time1 = new Date();
+    //Call function that calculate the distance
     (0, naive_1.calculateNumberOfCrossings)(crossesNumber, polygons, points);
     let time2 = new Date();
     (0, naive_1.makeVisabilityGraph)(graph, graphDistance, crossesNumber, points);
     let time3 = new Date();
+    //The graph is constructed call dijksta to calculate the distance
     let distance = (0, naive_1.dijkstra)(graphDistance, graph, route);
     let time4 = new Date();
+    //Output the distance
     if (exports.config.printGraph) {
         (0, draw_1.draw)(testTitle, start, end, polygons, distance, points, route, graph);
     }

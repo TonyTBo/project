@@ -74,6 +74,10 @@ function CreateArrayWithRows(size: number) {
     return x;
 }
 
+function CreatArray(size: number){
+    return new Array(size)
+}
+
 function createArrayWithRowAndColumm(size: number) {
     var x = new Array(size);
     for (var i = 0; i < size; i++) {
@@ -81,7 +85,6 @@ function createArrayWithRowAndColumm(size: number) {
     }
     return x;
 }
-
 
 function main(argc:number, argv:string[]) {
     // var max_x: number =0, max_y: number =0, min_x: number =0, min_y: number =0;
@@ -108,7 +111,7 @@ function main(argc:number, argv:string[]) {
     let graphDistance = CreateArrayWithRows(dimension)
 
     //Vector so we can backtrack the route
-    let route!: Array<number>
+    let route = CreatArray(graph.length)
     let crossesNumber = createArrayWithRowAndColumm(points.length)
 
     let time1 = new Date();

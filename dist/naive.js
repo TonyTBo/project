@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.calculateNumberOfCrossings = exports.makeVisabilityGraph = exports.dijkstra = exports.crosses = exports.readInput = void 0;
 const _1 = require(".");
-// import { Queue }  from "./Queue.ts";
+// import  queue   from "./Queue";
 //ok
 function readPoint() {
     let x, y;

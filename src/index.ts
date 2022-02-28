@@ -55,7 +55,7 @@ export function setConfig(argc:number,argv:string[]) {
 				var temp=argv[i+1];
                 var index=temp.search(/\D/);
                 if(index!=-1){
-                    config.printLevel=Number(temp[index]);
+                    config.printLevel= Number(temp);
                 }
 			}
 		}
@@ -74,17 +74,17 @@ function CreateArrayWithRows(size: number) {
     return x;
 }
 
-function CreatArray(size: number){
-    return new Array(size)
-}
+// function CreatArray(){
+//     return new Array()
+// }
 
-function createArrayWithRowAndColumm(size: number) {
-    var x = new Array(size);
-    for (var i = 0; i < size; i++) {
-    x[i] = new Array(size);
-    }
-    return x;
-}
+// function createArrayWithRowAndColumm(size: number) {
+//     var x = new Array(size);
+//     for (var i = 0; i < size; i++) {
+//     x[i] = new Array(size);
+//     }
+//     return x;
+// }
 
 function main(argc:number, argv:string[]) {
     // var max_x: number =0, max_y: number =0, min_x: number =0, min_y: number =0;
@@ -111,8 +111,8 @@ function main(argc:number, argv:string[]) {
     let graphDistance = CreateArrayWithRows(dimension)
 
     //Vector so we can backtrack the route
-    let route = CreatArray(graph.length)
-    let crossesNumber = createArrayWithRowAndColumm(points.length)
+    let route: Array<number> = new Array();
+    let crossesNumber = CreateArrayWithRows(points.length)
 
     let time1 = new Date();
     //Call function that calculate the distance

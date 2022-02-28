@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 class Queue {
     constructor(array = []) {
         this._queue = array;
@@ -30,4 +31,5 @@ class Queue {
         this._tail = 0;
     }
 }
+exports.default = Queue;
 //# sourceMappingURL=Queue.js.map

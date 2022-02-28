@@ -1,5 +1,5 @@
 import { lineSegment, point} from ".";
-import  queue   from "./Queue";
+// import  queue   from "./Queue";
 //ok
 function readPoint(){
     let x!: number, y!: number;
@@ -161,7 +161,7 @@ class Queue {
     peek() {
       return this._queue[this._head];
     }
-  
+  //./a.out < test/test3.txt -k -p > test/test.svg
     clear() {
       this._queue = [];
       this._head = 0;
@@ -169,9 +169,6 @@ class Queue {
     }
 }
 
-function CreatArray(size: number){
-    return new Array(size)
-}
 
 //Implementation of dijkstra
 //Takes a graph and a start and end point in the graph
@@ -181,9 +178,9 @@ export function dijkstra(graphDistance: Array<Array<number>>, graph: Array<Array
     let end = graph.length - 1;
 
     //Create a vector to see if we already visited the point
-    let visited = CreatArray(graph.length)
+    let visited: Array<boolean> = new Array();
    
-    const pq = new queue();
+    const pq = new Queue();
     // var pq!: Array<tuple: [number, number, number]>;
 
     let tuple: [number, number, number] = [0, start, -1];

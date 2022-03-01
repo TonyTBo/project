@@ -134,4 +134,3 @@ function main(argc:number, argv:string[]) {
     }
 }
 
-main(1, ["a", "b", "c"]);

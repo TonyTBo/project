@@ -1,42 +1,26 @@
-export default class Queue {
-  private _queue: any[];
-  private _head: number;
-  private _tail: number;
-
-  constructor(array: any[]= []) {
-    this._queue = array;
-    this._head = 0;
-    this._tail = array.length;
+export class Queue {
+  stack: any[];
+  constructor() {
+    this.stack = [];
   }
 
-  isEmpty() {
-    return this.size() === 0;
+  push(item: any) {
+    return this.stack.push(item);
   }
 
-  size() {
-    return this._tail;
-  }
-
-  enqueue(value: any) {
-    this._queue[this._tail] = value;
-    this._tail++;
-  }
-
-  dequeue() {
-    const value = this._queue[this._head];
-    delete this._queue[this._head];
-    this._head++;
-    return value;
+  pop() {
+    return this.stack.pop();
   }
 
   peek() {
-    return this._queue[this._head];
+    return this.stack[this.length - 1];
   }
 
-  clear() {
-    this._queue = [];
-    this._head = 0;
-    this._tail = 0;
+  get length() {
+    return this.stack.length;
   }
 
+  isEmpty() {
+    return this.length === 0;
+  }
 }

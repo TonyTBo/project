@@ -1,67 +1,93 @@
 import { lineSegment, point} from ".";
+
 // import  queue   from "./Queue";
 //ok
-function readPoint(){
-    let x!: number, y!: number;
-    console.log(`x: ${x} -- y: ${y}`);
+function readPoint(a: string){
+    let split_a = a.split(",")
+    let x: number = Number(split_a[0]);
+    let y: number = Number(split_a[1]);
+    // console.log(`x: ${x} -- y: ${y}`);
     let p = new point(x,y);
     return p;
 }
 
-export function readInput(start: point, end: point, testTitle: string, polygons: Array<Array<lineSegment>>, points: Array<point>){
+function CreateArrayWithRows(size: number) {
+    var x = new Array(size);
+    for (var i = 0; i < size; i++) {
+    x[i] = new Array();
+    }
+    return x;
+}
+
+export async function readInput(this: any, start: point, end: point, testTitle: string, polygons: Array<Array<lineSegment>>, points: Array<point>, readFile: String){
     //Read start and end points
-    start = readPoint();
-    end = readPoint();
+    const lines = readFile.split('\n')
+    testTitle = lines[0]
+    start = readPoint(lines[1]);
+    end = readPoint(lines[2]);
+    let line3 = Number(lines[3])
+    let listLine4: string[][] = [[]];
+    for(let i = 4; i < lines.length; i++){
+        let a: string[] = lines[i].split(" ");
+        listLine4?.push(a)
+    }
+    listLine4.shift()
+    console.log("listLine4--->", listLine4)
+
     points.push(start);
-
-    var numberOfPolygons!: number; // not yet
-
+    // let polygons_ = await CreateArrayWithRows(line3);
+    // var numberOfPolygons!: number; // not yet
     //Iterate through the polygons
-    for(let i = 0; i < numberOfPolygons; i++){
-        let numberOfSides!: number;
+    polygons.shift()
+    for(let i = 0; i < line3; i++){
+        polygons.push([])
+        let numberOfSides: number = listLine4[i].length;
 
         //Get the first point and remember it 
 		//so we can make the last linesegment after the loop
-        let firstPoint: point = readPoint();
+        let firstPoint: point = readPoint(lines[1]);
 
         //Create a variable for the last point we saw
-        let lastPoint: point = firstPoint;
+        let lastPoint: point = readPoint(lines[2]);
 
         //Add the first point
-        points.push(firstPoint);
+        // points.push(firstPoint);
+        // polygons.shift()
 
-        for(let j = 0; j < numberOfSides; j++){
+        for(let j = 1; j < numberOfSides; j++){
             //Get the next point
-            let currentPoint = readPoint();
+            let currentPoint = readPoint(listLine4[i][j]);
+            console.log("xxxxxx--->",lastPoint, currentPoint)
+            // console.log("lastPoint--->", lastPoint)
 
             //Add point to list of points
             points.push(currentPoint);
 
             //create linesegment
-            let l!: lineSegment;
-
+            let l = new lineSegment(lastPoint, currentPoint)
             //Set the linesegment
             l.p = lastPoint;
             l.q = currentPoint;
-
+            
             //push it to the list of linesegments
-            polygons[i].push(l);
+            polygons[i]?.push(l);
 
             //and update the lastPoint
             lastPoint = currentPoint;
-
+            console.log('polygon-->', polygons)
         }
-
         //Construct the missing linesegment
-        let l!: lineSegment;
+        let l = new lineSegment(lastPoint, firstPoint)
         l.p = lastPoint;
         l.q = firstPoint;
 
         //and push it to the vector
-        polygons[i].push(l);
+        polygons[i]?.push(l);
 
     }
     points.push(end);
+    // polygons.pop();
+    return await {  start, end, testTitle, polygons, points  }
 }
 
 //ok
@@ -192,7 +218,7 @@ export function dijkstra(graphDistance: Array<Array<number>>, graph: Array<Array
         pq.dequeue();
 
         //How far have we travelled until now
-        let distanceSoFar = -1*t[0];
+        let distanceSoFar = Number(-1*t[0]);
 
         //What point are we at
         let current: number = t[1];
@@ -258,7 +284,7 @@ export function makeVisabilityGraph(graph: Array<Array<number>>, graphDistance: 
 export function calculateNumberOfCrossings(crossesNumber: Array<Array<number>>, polygons: Array<Array<lineSegment>>, points: Array<point>){
     for(let i: number = 0;i < points.length; i++ ){
         for(let j: number = 0; j < points.length; j++){
-            let l!: lineSegment;
+            let l = new lineSegment(points[i], points[j]);
             l.p = points[i];
             l.q = points[j];
 

@@ -52,7 +52,6 @@ export function setConfig(argc: number, argv: string[]) {
         var s = argv[i];
         if (s == ("-k")) {
             config.k = Number([i + 1]);
-            console.log("umber(argv[i+1])", Number(argv[i + 1]))
         }
         if (s == ("-p")) {
             config.printGraph = true;
@@ -80,14 +79,8 @@ function CreateArrayWithRows(size: number) {
 }
 
 async function main(argc: number, argv: string[]) {
-    // var max_x: number =0, max_y: number =0, min_x: number =0, min_y: number =0;
-    console.log(process.argv);
     setConfig(argc, argv);
     const conf = path.join(__dirname, argv[2])
-    console.log(conf)
-    console.log("config ===> ", config)
-    console.log("argv[2]--->", argv[2])
-    console.log("argv[2]--->", typeof (argv[2]))
 
     let start: point, end: point, testTitle: string
     //Create vector for containing the linesegments of the polygons

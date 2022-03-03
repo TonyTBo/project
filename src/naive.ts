@@ -1,6 +1,6 @@
 import { lineSegment, point } from ".";
 
-// import  queue   from "./Queue";
+import  { Queue }   from "./Queue";
 //ok
 function readPoint(a: string) {
     let split_a = a.split(",")
@@ -34,7 +34,6 @@ export async function readInput(this: any, start: point, end: point, testTitle: 
         listLine4?.push(a)
     }
     listLine4.shift()
-    console.log("listLine4--->", listLine4)
 
     points.push(start);
     // let polygons_ = await CreateArrayWithRows(line3);
@@ -60,8 +59,6 @@ export async function readInput(this: any, start: point, end: point, testTitle: 
         for (let j = 1; j < numberOfSides; j++) {
             //Get the next point
             let currentPoint = readPoint(listLine4[i][j]);
-            console.log("xxxxxx--->", lastPoint, currentPoint)
-            // console.log("lastPoint--->", lastPoint)
 
             //Add point to list of points
             points.push(currentPoint);
@@ -77,7 +74,6 @@ export async function readInput(this: any, start: point, end: point, testTitle: 
 
             //and update the lastPoint
             lastPoint = currentPoint;
-            console.log('polygon-->', polygons)
         }
         //Construct the missing linesegment
         let l = new lineSegment(lastPoint, firstPoint)
@@ -89,7 +85,6 @@ export async function readInput(this: any, start: point, end: point, testTitle: 
 
     }
     points.push(end);
-    // polygons.pop();
     return await { start, end, testTitle, polygons, points }
 }
 
@@ -156,80 +151,6 @@ function numberOfCrossings(polygons: Array<Array<lineSegment>>, l: lineSegment) 
     } return n;
 }
 
-// class Queue {
-//     public _queue: any[];
-//     public _head: number;
-//     private _tail: number;
-
-//     constructor(array: any[] = []) {
-//         this._queue = [];
-//         this._head = 0;
-//         this._tail = array.length;
-//     }
-
-//     isEmpty() {
-//         return this.size() === 0;
-//     }
-
-//     size() {
-//         return this._tail;
-//     }
-
-//     enqueue(value: any) {
-//         this._queue[this._tail] = value;
-//         this._tail++;
-//     }
-
-//     dequeue() {
-//         const value = this._queue[this._head];
-//         this._queue.splice(this._head, 1)
-//         // delete this._queue[this._head];
-//         this._head ++;
-//         return value;
-//     }
-
-//     peek() {
-//         return this._queue[this._head];
-//     }
-//     //./a.out < test/test3.txt -k -p > test/test.svg
-//     clear() {
-//         this._queue = [];
-//         this._head = 0;
-//         this._tail = 0;
-//     }
-// }
-
-class Queue {
-    private _elements: any[]
-
-    constructor(elements: any[] = []) {
-        this._elements = [];
-    }
-
-    size() {
-        return this._elements.length;
-    }
-
-    enqueue(item: any) {
-        this._elements.unshift(item);
-        return true;
-    }
-
-    dequeue() {
-        return this._elements.pop();
-    }
-
-    peek() {
-        return this._elements[0];
-    }
-
-    clear() {
-        this._elements = []
-        this._elements.length = 0;
-    }
-}
-
-
 //Implementation of dijkstra
 //Takes a graph and a start and end point in the graph
 //returns the distance
@@ -244,14 +165,13 @@ export function dijkstra(graphDistance: Array<Array<number>>, graph: Array<Array
     // var pq!: Array<tuple: [number, number, number]>;
 
     let tuple: [number, number, number] = [0, start, -1];
-    pq.enqueue(tuple);
-    console.log(pq.peek())
-    console.log()
-    while (pq.size() != 0) {
+    pq.push(tuple);
+
+    while (pq.length != 0) {
         //@ts-ignore
         const t: [number, number, number] = pq.peek();
 
-        pq.dequeue();
+        pq.pop();
 
         //How far have we travelled until now
         let distanceSoFar = Number(-1 * t[0]);
@@ -279,7 +199,7 @@ export function dijkstra(graphDistance: Array<Array<number>>, graph: Array<Array
 
             let newTuple: [number, number, number] = [-1 * newdistance, next, current];
 
-            pq.enqueue(newTuple);
+            pq.push(newTuple);
         }
     }
     return -1;

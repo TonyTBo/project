@@ -14,11 +14,11 @@ export function setMinMax(x: number, y: number) {
 }
 // setMinMax(3,3)
 // console.log(max_x,max_y,min_x,min_y)
-function drawX(x: point) {
-    return x.x * 10;
+function drawX(p: point) {
+    return p.x * 10;
 }
-function drawY(y: point) {
-    return y.x * 10;
+function drawY(p: point) {
+    return p.y * -10;
 }
 // var p=new point(1,1);
 // console.log(p.x,p.y);
@@ -77,6 +77,7 @@ function drawGraph(graph: Array<Array<number>>, points: Array<point>) {
     for (var i = plane_start; i < plane_end; i++) {
         for (var j = 0; j < graph[i].length; j++) {
             var from = points[i % points.length], to = points[graph[i][j] % points.length];
+            console.log("from-->", from, "to-->", to)
             svg += "<line x1='" + drawX(from) + "' y1='" + drawY(from) + "' x2='" + drawX(to) + "' y2='" + drawY(to) + "' stroke-width='0.1' stroke='blue'/>\n";
         }
     }

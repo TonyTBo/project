@@ -3,10 +3,11 @@ import { lineSegment, point } from ".";
 import  { Queue }   from "./Queue";
 //ok
 function readPoint(a: string) {
+    console.log('aaaaa->', a)
     let split_a = a.split(",")
     let x: number = Number(split_a[0]);
     let y: number = Number(split_a[1]);
-    // console.log(`x: ${x} -- y: ${y}`);
+    console.log(`x: ${x} -- y: ${y}`);
     let p = new point(x, y);
     return p;
 }
@@ -28,6 +29,7 @@ export async function readInput(this: any, start: point, end: point, testTitle: 
     end = readPoint(lines[2]);
 
     let line3 = Number(lines[3])
+    console.log("lines-->", lines)
     let listLine4: string[][] = [[]];
     for (let i = 4; i < lines.length; i++) {
         let a: string[] = lines[i].split(" ");
@@ -36,27 +38,30 @@ export async function readInput(this: any, start: point, end: point, testTitle: 
     listLine4.shift()
 
     points.push(start);
+    console.log("start-->", start)
+    console.log("listLine4-->", listLine4)
     // let polygons_ = await CreateArrayWithRows(line3);
     // var numberOfPolygons!: number; // not yet
     //Iterate through the polygons
     polygons.shift()
-
+    
     for (let i = 0; i < line3; i++) {
+        listLine4[i].shift()
         polygons.push([])
         let numberOfSides: number = listLine4[i].length;
 
         //Get the first point and remember it 
         //so we can make the last linesegment after the loop
-        let firstPoint: point = readPoint(lines[1]);
+        let firstPoint: point = readPoint(listLine4[i][0]);
 
         //Create a variable for the last point we saw
-        let lastPoint: point = readPoint(lines[2]);
+        let lastPoint: point = firstPoint;
 
         //Add the first point
-        // points.push(firstPoint);
+        points.push(firstPoint);
         // polygons.shift()
 
-        for (let j = 1; j < numberOfSides; j++) {
+        for (let j = 0; j < numberOfSides; j++) {
             //Get the next point
             let currentPoint = readPoint(listLine4[i][j]);
 
@@ -84,7 +89,9 @@ export async function readInput(this: any, start: point, end: point, testTitle: 
         polygons[i]?.push(l);
 
     }
+    console.log("end-->", end)
     points.push(end);
+    console.log("point-->", points)
     return await { start, end, testTitle, polygons, points }
 }
 

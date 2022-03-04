@@ -81,6 +81,8 @@ function CreateArrayWithRows(size: number) {
 async function main(argc: number, argv: string[]) {
     setConfig(argc, argv);
     const conf = path.join(__dirname, argv[2])
+    console.log("config-->", config)
+    console.log("config-->", argv)
 
     let start: point, end: point, testTitle: string
     //Create vector for containing the linesegments of the polygons
@@ -118,6 +120,7 @@ async function main(argc: number, argv: string[]) {
 
     let time4 = new Date();
     //Output the distance
+    console.log("point -index-->", obj.points)
     if (config.printGraph) {
         draw(obj.testTitle, obj.start, obj.end, obj.polygons, distance, obj.points, route, graph);
     } else {

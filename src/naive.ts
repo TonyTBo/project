@@ -180,7 +180,7 @@ export function dijkstra(graphDistance: Array<Array<any>>, graph: Array<Array<nu
 
     while (pq.size() != 0) {
         //@ts-ignore
-        let t = pq.top();
+        let t: [any, number, number]= pq.top();
 
         pq.pop();
         // console.log("pq after -->", pq.length)

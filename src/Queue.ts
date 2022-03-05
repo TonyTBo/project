@@ -12,7 +12,7 @@ export class Queue {
     return this.stack.pop();
   }
 
-  peek() {
+  top() {
     return this.stack[this.length - 1];
   }
 

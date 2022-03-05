@@ -3,13 +3,15 @@ import { lineSegment, point } from ".";
 import  { Queue }   from "./Queue";
 //ok
 function readPoint(a: string) {
-    console.log('aaaaa->', a)
-    let split_a = a.split(",")
-    let x: number = Number(split_a[0]);
-    let y: number = Number(split_a[1]);
-    console.log(`x: ${x} -- y: ${y}`);
-    let p = new point(x, y);
-    return p;
+    if(a != undefined){
+        let split_a = a.split(",")
+        let x: number = Number(split_a[0]);
+        let y: number = Number(split_a[1]);
+        console.log(`x: ${x} -- y: ${y}`);
+        let p = new point(x, y);
+        return p;
+    }
+   
 }
 
 function CreateArrayWithRows(size: number) {
@@ -29,7 +31,7 @@ export async function readInput(this: any, start: point, end: point, testTitle: 
     end = readPoint(lines[2]);
 
     let line3 = Number(lines[3])
-    console.log("lines-->", lines)
+
     let listLine4: string[][] = [[]];
     for (let i = 4; i < lines.length; i++) {
         let a: string[] = lines[i].split(" ");
@@ -38,10 +40,7 @@ export async function readInput(this: any, start: point, end: point, testTitle: 
     listLine4.shift()
 
     points.push(start);
-    console.log("start-->", start)
-    console.log("listLine4-->", listLine4)
-    // let polygons_ = await CreateArrayWithRows(line3);
-    // var numberOfPolygons!: number; // not yet
+
     //Iterate through the polygons
     polygons.shift()
     
@@ -61,9 +60,9 @@ export async function readInput(this: any, start: point, end: point, testTitle: 
         points.push(firstPoint);
         // polygons.shift()
 
-        for (let j = 0; j < numberOfSides; j++) {
+        for (let j = 0; j < numberOfSides-1; j++) {
             //Get the next point
-            let currentPoint = readPoint(listLine4[i][j]);
+            let currentPoint = readPoint(listLine4[i][j+1]);
 
             //Add point to list of points
             points.push(currentPoint);
@@ -91,32 +90,28 @@ export async function readInput(this: any, start: point, end: point, testTitle: 
     }
     console.log("end-->", end)
     points.push(end);
-    console.log("point-->", points)
+    // console.log("point-->", points)
+    // console.log("polygons-->", polygons)
     return await { start, end, testTitle, polygons, points }
 }
 
-//ok
-//Function for calculating the distance between two points
-function dist(p: point, q: point): number {
-    //calculate euclidean distance sqrt( (p.x-q.x)^2+(p.y-q.y)^2 )
-    return Math.sqrt(Math.pow(p.x - q.x, 2.0) + Math.pow(p.y - q.y, 2.0));
-}
 
 //ok
-function rightTurn(p1: point, p2: point, p3: point): number {
+function rightTurn(p1: point, p2: point, p3: point) {
     return (p1.y - p2.y) * (p2.x - p3.x) - (p2.y - p3.y) * (p1.x - p2.x);
 }
 
 //ok
 export function crosses(l1: lineSegment, l2: lineSegment) {
-    if (l1 == l2) return -1;
-    let returnValue: number = 0;
+    if (l1.p == l2.p && l1.q == l2.q || l1.p == l2.q && l1.q == l2.p) return -1;
+    let returnValue = 0;
     if (l1.p == l2.p) returnValue++;
     if (l1.p == l2.q) returnValue++;
     if (l1.q == l2.p) returnValue++;
     if (l1.q == l2.q) returnValue++;
 
     if (returnValue > 0) return returnValue;
+    
     let rt_1 = rightTurn(l1.p, l1.q, l2.p);
     let rt_2 = rightTurn(l1.p, l1.q, l2.q);
     let rt_3 = rightTurn(l2.p, l2.q, l1.p);
@@ -137,11 +132,15 @@ export function crosses(l1: lineSegment, l2: lineSegment) {
 //ok
 //Takes a line segment and returns the number of polygon edges it crosses
 function numberOfCrossings(polygons: Array<Array<lineSegment>>, l: lineSegment) {
-    let n: number = 0;
-    for (let i: number = 0; i < polygons.length; i++) {
-        let numberOfVaolation: number = 0;
-        for (let j: number = 0; j < polygons[i].length; j++) {
-            let result: number = crosses(l, polygons[i][j]);
+    let n = 0;
+    for (let i = 0; i < polygons.length; i++) {
+        let numberOfVaolation = 0;
+        for (let j = 0; j < polygons[i].length; j++) {
+
+            let result = crosses(l, polygons[i][j]);
+
+            // console.log("result - naive-->", result)
+            
             if (result == -1) {
                 return 0;
             }
@@ -155,13 +154,14 @@ function numberOfCrossings(polygons: Array<Array<lineSegment>>, l: lineSegment) 
         if (numberOfVaolation > 2) {
             n++;
         }
-    } return n;
+    } 
+    return n;
 }
 
 //Implementation of dijkstra
 //Takes a graph and a start and end point in the graph
 //returns the distance
-export function dijkstra(graphDistance: Array<Array<number>>, graph: Array<Array<number>>, route: Array<number>) {
+export function dijkstra(graphDistance: Array<Array<any>>, graph: Array<Array<number>>, route: Array<number>) {
     let start = 0;
     let end = graph.length - 1;
 
@@ -171,21 +171,21 @@ export function dijkstra(graphDistance: Array<Array<number>>, graph: Array<Array
     const pq = new Queue();
     // var pq!: Array<tuple: [number, number, number]>;
 
-    let tuple: [number, number, number] = [0, start, -1];
+    let tuple = [0, start, -1];
     pq.push(tuple);
 
     while (pq.length != 0) {
         //@ts-ignore
-        const t: [number, number, number] = pq.peek();
+        let t = pq.top();
 
         pq.pop();
 
         //How far have we travelled until now
-        let distanceSoFar = Number(-1 * t[0]);
+        let distanceSoFar = -1 * t[0];
 
         //What point are we at
-        let current: number = t[1];
-        let whereFrom: number = t[2];
+        let current = t[1];
+        let whereFrom = t[2];
 
         //If we already visited the current continue
         if (visited[current]) continue;
@@ -202,51 +202,95 @@ export function dijkstra(graphDistance: Array<Array<number>>, graph: Array<Array
             if (visited[next]) continue;
 
             //calculate the complete distance to that current
-            let newdistance: number = distanceSoFar + graphDistance[current][i];
+            let newdistance = distanceSoFar + graphDistance[current][i];
 
             let newTuple: [number, number, number] = [-1 * newdistance, next, current];
 
             pq.push(newTuple);
         }
     }
+    console.log("route")
     return -1;
 }
 
+//Function for calculating the distance between two points
+function dist(p: point, q: point) {
+    //calculate euclidean distance sqrt( (p.x-q.x)^2+(p.y-q.y)^2 )
+    return Math.sqrt(Math.pow(p.x - q.x, 2.0) + Math.pow(p.y - q.y, 2.0));
+}
+
 //ok
-export function makeVisabilityGraph(graph: Array<Array<number>>, graphDistance: Array<Array<number>>, crossesNumber: Array<Array<number>>, points: Array<point>) {
+export function makeVisabilityGraph(graph: Array<Array<any>>, graphDistance: Array<Array<any>>, crossesNumber: Array<Array<number>>, points: Array<point>) {
     //Get how many points we have
     let numberOfPoints = points.length;
-
+    //console.log("numberOfPoints-->", numberOfPoints, "--graph.length-->", graph.length)//5 - 5
     //Go through all pairs of points and calculate the distance
-    for (let i: number = 0; i < graph.length; i++) {
-        for (let j: number = 0; j < numberOfPoints; j++) {
+    for (let i = 0; i < graph.length; i++) {
+        for (let j = 0; j < numberOfPoints; j++) {
             let from = i;
 
-            let from_point_index = from % numberOfPoints;
+            let from_point_index = from%numberOfPoints;
 
             let to_point_index = j;
 
-            let to = (i / numberOfPoints) * numberOfPoints + crossesNumber[from_point_index][j] * numberOfPoints + j;
+            let to = crossesNumber[from_point_index][j] * numberOfPoints + j;
 
+            console.log('from-->', from, "--from_point_index-->", from_point_index, "--to_point_index-->", to_point_index, "--to-->", to)
             //If it is the same point don't make an edge
             if (graph.length > to) {
                 //Call dist function to calculate the distance
                 let distance = dist(points[from_point_index], points[to_point_index]);
+                console.log("------> distance", distance)
 
                 graphDistance[from].push(distance);
                 graph[from].push(to);
+                console.log("-------------------------------------")
+            }
+            // else{
+            //     graphDistance[from].push(0);
+            //     graph[from].push(0);
+            // }
+        }
+        if(graph[i].length < graph.length){
+            for(let j = graph[i].length; j < graph.length; j++){
+                graph[i].push(0)
             }
         }
+        if(graphDistance[i].length < graphDistance.length){
+            for(let j = graphDistance[i].length; j < graphDistance.length; j++){
+                graphDistance[i].push(0)
+            }
+        }
+        console.log("-----------------------------------xong--------------------------------------", i)
     }
+    console.log('xxxx')
     return 0;
 }
+/*
+graph0  -->0--1--2--0--0
+graph1  -->0--2--3--0--0
+graph2  -->0--1--3--4--0
+graph3  -->1--2--4--0--0
+graph4  -->2--3--4--0--0
+graphDistance0  -->0--1--1--0--0
+graphDistance1  -->1--1.41421--2.23607--0--0
+graphDistance2  -->1--1.41421--3--3.60555--0
+graphDistance3  -->2.23607--3--2--0--0
+graphDistance4  -->3.60555--2--0--0--0
+
+[[0 0 0 1 1],
+[0 1 0 0 1],
+[0 0 1 0 0],
+[1 0 0 1 0],
+[1 1 0 0 0]]
+*/
 
 
 
 //ok
-export function calculateNumberOfCrossings(crossesNumber: Array<Array<number>>, polygons: Array<Array<lineSegment>>, points: Array<point>) {
-    for (let i: number = 0; i < points.length; i++) {
-        for (let j: number = 0; j < points.length; j++) {
+export function calculateNumberOfCrossings(crossesNumber: Array<Array<any>>, polygons: Array<Array<lineSegment>>, points: Array<point>) {
+    for (let i = 0; i < points.length; i++) {
+        for (let j = 0; j < points.length; j++) {
             let l = new lineSegment(points[i], points[j]);
             l.p = points[i];
             l.q = points[j];
@@ -256,5 +300,15 @@ export function calculateNumberOfCrossings(crossesNumber: Array<Array<number>>, 
             crossesNumber[i][j] = numberOfCrossings(polygons, l);
         }
     }
-    return 0;
+    // return 0;
 }
+
+/*
+sai j = 2
+crossesNumber
+[[0 0 0 1 1],
+[0 1 0 0 1],
+[0 0 1 0 0],
+[1 0 0 1 0],
+[1 1 0 0 0]]
+*/

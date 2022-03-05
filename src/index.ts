@@ -51,7 +51,7 @@ export function setConfig(argc: number, argv: string[]) {
     for (var i = 1; i < argc; i++) {
         var s = argv[i];
         if (s == ("-k")) {
-            config.k = Number([i + 1]);
+            config.k = 0;
         }
         if (s == ("-p")) {
             config.printGraph = true;
@@ -59,7 +59,7 @@ export function setConfig(argc: number, argv: string[]) {
                 var temp = argv[i + 1];
                 var index = temp.search(/\D/);
                 if (index != -1) {
-                    config.printLevel = Number(temp[index]);
+                    config.printLevel = 0;
                 }
             }
         }
@@ -102,7 +102,8 @@ async function main(argc: number, argv: string[]) {
     let dimension = numberOfPoints * (config.k + 1);
     var graph = CreateArrayWithRows(dimension);
     let graphDistance = CreateArrayWithRows(dimension);
-
+    console.log("points - index-->", obj.points)
+    console.log("polygons - index-->", obj.polygons[0])
     //Vector so we can backtrack the route
     let route: Array<number> = new Array();
     let crossesNumber = CreateArrayWithRows(obj.points.length)
@@ -116,11 +117,11 @@ async function main(argc: number, argv: string[]) {
 
     let time3 = new Date();
     //The graph is constructed call dijksta to calculate the distance
-    let distance: number = dijkstra(graphDistance, graph, route);
+    let distance = dijkstra(graphDistance, graph, route);
 
     let time4 = new Date();
     //Output the distance
-    console.log("point -index-->", obj.points)
+
     if (config.printGraph) {
         draw(obj.testTitle, obj.start, obj.end, obj.polygons, distance, obj.points, route, graph);
     } else {
@@ -129,5 +130,10 @@ async function main(argc: number, argv: string[]) {
 }
 
 process.argv.slice(2)
-main(process.argv.length, process.argv)
+let b = [ '/home/annhi/Desktop/project/node_modules/.bin/ts-node',
+'/home/annhi/Desktop/project/src/index.ts',
+'test2.txt',
+'-k',
+'-p']
+main(b.length, b)
 

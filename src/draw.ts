@@ -29,7 +29,7 @@ function drawRoute(route: Array<number>, points: Array<point>) {
     let a = "<polyline stroke='red' stroke-width='0.2' fill='none' points='";
     var current = route.length - 1;
     while (current != -1) {
-        var p = points[current % points.length];
+        let p = points[current % points.length];
         a += drawX(p) + "," + drawY(p) + " ";
         current = route[current];
     }
@@ -60,7 +60,7 @@ function drawPolygons(polygons: Array<Array<lineSegment>>) {
 // 		drawPolygon(polygons[i]);
 // 	}
 // }
-function drawTitle(testTitle: string, distance: number) {
+function drawTitle(testTitle: string, distance: any) {
     var output = "<text x='0' y='";
     output += (-10 * max_y - 5);
     output += "' font-family='Verdana' font-size='5'>";
@@ -77,13 +77,13 @@ function drawGraph(graph: Array<Array<number>>, points: Array<point>) {
     for (var i = plane_start; i < plane_end; i++) {
         for (var j = 0; j < graph[i].length; j++) {
             var from = points[i % points.length], to = points[graph[i][j] % points.length];
-            console.log("from-->", from, "to-->", to)
+            // console.log("from-->", from, "to-->", to)
             svg += "<line x1='" + drawX(from) + "' y1='" + drawY(from) + "' x2='" + drawX(to) + "' y2='" + drawY(to) + "' stroke-width='0.1' stroke='blue'/>\n";
         }
     }
 }
 
-export async function draw(testTitle: string, start: point, end: point, polygons: Array<Array<lineSegment>>, distance: number, points: Array<point>, route: Array<number>, graph: Array<Array<number>>) {
+export async function draw(testTitle: string, start: point, end: point, polygons: Array<Array<lineSegment>>, distance: any, points: Array<point>, route: Array<number>, graph: Array<Array<number>>) {
     svg += "<?xml version='1.0' encoding='UTF-8' ?>\n";
     svg += "<svg viewBox='" + (10 * min_x - 5) + " " + (-10 * max_y - 15) + " " + ((Math.abs(min_x) + Math.abs(max_x)) * 10 + 10) + " " + ((Math.abs(min_y) + Math.abs(max_y)) * 10 + 20) + "' xmlns='http://www.w3.org/2000/svg' version='1.1'>\n";
     await drawPolygons(polygons);

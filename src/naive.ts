@@ -2,6 +2,8 @@ import { lineSegment, point } from ".";
 
 import  { Queue }   from "./Queue";
 
+import  { PriorityQueue }   from "./PriorityQueue";
+
 //ok
 function readPoint(a: string) {
     if(a != undefined){
@@ -169,26 +171,26 @@ export function dijkstra(graphDistance: Array<Array<any>>, graph: Array<Array<nu
     //Create a vector to see if we already visited the point
     let visited: Array<boolean> = new Array();
 
-    const pq = new Queue();
+    const pq = new PriorityQueue();
     // var pq!: Array<tuple: [number, number, number]>;
 
     let tuple = [0, start, -1];
     pq.push(tuple);
-    console.log("pq berfore -->", pq.length)
+    // console.log("pq berfore -->", pq.length)
 
-    while (pq.length != 0) {
+    while (pq.size() != 0) {
         //@ts-ignore
         let t = pq.top();
 
         pq.pop();
-        console.log("pq after -->", pq.length)
+        // console.log("pq after -->", pq.length)
 
         //How far have we travelled until now
-        let distanceSoFar = -1 * t[0];
+        let distanceSoFar = -1 * t[0];//0
 
         //What point are we at
-        let current = t[1];
-        let whereFrom = t[2];
+        let current = t[1];// start: 0
+        let whereFrom = t[2]; //-1
 
         //If we already visited the current continue
         if (visited[current]) continue;
@@ -216,6 +218,19 @@ export function dijkstra(graphDistance: Array<Array<any>>, graph: Array<Array<nu
     return -1;
 }
 //route -->-1--0--0--1--2
+
+// Graph
+// (0--1--2)
+// (0--2--3)
+// (0--1--3--4)
+// (1--2--4)
+// (2--3--4)
+// graphDistance
+// (0--1--1)
+// (1--1.41421--2.23607)
+// (1--1.41421--3--3.60555)
+// (2.23607--3--2)
+// (3.60555--2--0)
 
 //Function for calculating the distance between two points
 function dist(p: point, q: point) {
@@ -257,16 +272,18 @@ export function makeVisabilityGraph(graph: Array<Array<any>>, graphDistance: Arr
     return 0;
 }
 /*
-graph0  -->0--1--2--0--0
-graph1  -->0--2--3--0--0
-graph2  -->0--1--3--4--0
-graph3  -->1--2--4--0--0
-graph4  -->2--3--4--0--0
-graphDistance0  -->0--1--1--0--0
-graphDistance1  -->1--1.41421--2.23607--0--0
-graphDistance2  -->1--1.41421--3--3.60555--0
-graphDistance3  -->2.23607--3--2--0--0
-graphDistance4  -->3.60555--2--0--0--0
+Graph
+(0--1--2--0--0)
+(0--2--3--0--0)
+(0--1--3--4--0)
+(1--2--4--0--0)
+(2--3--4--0--0)
+graphDistance
+(0--1--1--0--0)
+(1--1.41421--2.23607--0--0)
+(1--1.41421--3--3.60555--0)
+(2.23607--3--2--0--0)
+(3.60555--2--0--0--0)
 
 [[0 0 0 1 1],
 [0 1 0 0 1],

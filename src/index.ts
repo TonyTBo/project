@@ -127,7 +127,7 @@ async function main(argc: number, argv: string[]) {
 process.argv.slice(2)
 let b = [ '/home/annhi/Desktop/project/node_modules/.bin/ts-node',
 '/home/annhi/Desktop/project/src/index.ts',
-'test6.txt',
+'test2.txt',
 '-k',
 '-p']
 main(b.length, b)

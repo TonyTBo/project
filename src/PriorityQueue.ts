@@ -13,6 +13,10 @@ export class PriorityQueue<T> {
     return this.items.length === 0
   }
 
+  size(): number {
+    return this.items.length;
+  }
+
   push(item: T): void {
     this.items.push(item)
     for (let i = this.items.length - 1; i > 0;) {

@@ -55,13 +55,7 @@ export function setConfig(argc: number, argv: string[]) {
         }
         if (s == ("-p")) {
             config.printGraph = true;
-            if (argc - 1 > i) {
-                var temp = argv[i + 1];
-                var index = temp.search(/\D/);
-                if (index != -1) {
-                    config.printLevel = 0;
-                }
-            }
+            config.printLevel = 0;
         }
     }
 }
@@ -82,7 +76,7 @@ async function main(argc: number, argv: string[]) {
     setConfig(argc, argv);
     const conf = path.join(__dirname, argv[2])
     console.log("config-->", config)
-    console.log("config-->", argv)
+    console.log("argv-->", argv)
 
     let start: point, end: point, testTitle: string
     //Create vector for containing the linesegments of the polygons
@@ -102,8 +96,8 @@ async function main(argc: number, argv: string[]) {
     let dimension = numberOfPoints * (config.k + 1);
     var graph = CreateArrayWithRows(dimension);
     let graphDistance = CreateArrayWithRows(dimension);
-    console.log("points - index-->", obj.points)
-    console.log("polygons - index-->", obj.polygons[0])
+    // console.log("points - index-->", obj.points)
+    // console.log("polygons - index-->", obj.polygons[0])
     //Vector so we can backtrack the route
     let route: Array<number> = new Array();
     let crossesNumber = CreateArrayWithRows(obj.points.length)
@@ -118,17 +112,18 @@ async function main(argc: number, argv: string[]) {
     let time3 = new Date();
     //The graph is constructed call dijksta to calculate the distance
     let distance = dijkstra(graphDistance, graph, route);
-
+    console.log("route--->", route)
     let time4 = new Date();
     //Output the distance
-
+    // let a = [-1, 0, 0, 1, 2]
     if (config.printGraph) {
         draw(obj.testTitle, obj.start, obj.end, obj.polygons, distance, obj.points, route, graph);
     } else {
         console.log(getTime(time1, time2) + "-" + getTime(time2, time3) + "-" + getTime(time3, time4) + "-" + distance);
     }
 }
-
+//route [-1, ..., 0, ..., 2]
+//route -->-1--0--0--1--2
 process.argv.slice(2)
 let b = [ '/home/annhi/Desktop/project/node_modules/.bin/ts-node',
 '/home/annhi/Desktop/project/src/index.ts',

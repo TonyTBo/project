@@ -55,11 +55,7 @@ function drawPolygons(polygons: Array<Array<lineSegment>>) {
         drawPolygon(polygons[i]);
     }
 }
-// function nadrawPolygonsme(polygons:Array<Array<lineSegment>>) {
-//     for(var i=0;i<polygons.length;i++){
-// 		drawPolygon(polygons[i]);
-// 	}
-// }
+
 function drawTitle(testTitle: string, distance: any) {
     var output = "<text x='0' y='";
     output += (-10 * max_y - 5);
@@ -74,9 +70,11 @@ function drawTitle(testTitle: string, distance: any) {
 function drawGraph(graph: Array<Array<number>>, points: Array<point>) {
     var plane_start = ((points.length * config.printLevel) / points.length) * points.length;
     var plane_end = plane_start + points.length;
+    console.log("plane_start-->", plane_start, "plane_end-->", plane_end)
     for (var i = plane_start; i < plane_end; i++) {
         for (var j = 0; j < graph[i].length; j++) {
-            var from = points[i % points.length], to = points[graph[i][j] % points.length];
+            let from = points[i % points.length];
+            let to = points[graph[i][j] % points.length];
             // console.log("from-->", from, "to-->", to)
             svg += "<line x1='" + drawX(from) + "' y1='" + drawY(from) + "' x2='" + drawX(to) + "' y2='" + drawY(to) + "' stroke-width='0.1' stroke='blue'/>\n";
         }

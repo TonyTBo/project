@@ -173,12 +173,14 @@ export function dijkstra(graphDistance: Array<Array<any>>, graph: Array<Array<nu
 
     let tuple = [0, start, -1];
     pq.push(tuple);
+    console.log("pq berfore -->", pq.length)
 
     while (pq.length != 0) {
         //@ts-ignore
         let t = pq.top();
 
         pq.pop();
+        console.log("pq after -->", pq.length)
 
         //How far have we travelled until now
         let distanceSoFar = -1 * t[0];
@@ -204,14 +206,15 @@ export function dijkstra(graphDistance: Array<Array<any>>, graph: Array<Array<nu
             //calculate the complete distance to that current
             let newdistance = distanceSoFar + graphDistance[current][i];
 
-            let newTuple: [number, number, number] = [-1 * newdistance, next, current];
+            let newTuple: [any, number, number] = [-1 * newdistance, next, current];
 
             pq.push(newTuple);
         }
     }
-    console.log("route")
+    console.log("route--->", route)
     return -1;
 }
+//route -->-1--0--0--1--2
 
 //Function for calculating the distance between two points
 function dist(p: point, q: point) {
@@ -235,21 +238,17 @@ export function makeVisabilityGraph(graph: Array<Array<any>>, graphDistance: Arr
 
             let to = crossesNumber[from_point_index][j] * numberOfPoints + j;
 
-            console.log('from-->', from, "--from_point_index-->", from_point_index, "--to_point_index-->", to_point_index, "--to-->", to)
+            // console.log('from-->', from, "--from_point_index-->", from_point_index, "--to_point_index-->", to_point_index, "--to-->", to)
             //If it is the same point don't make an edge
             if (graph.length > to) {
                 //Call dist function to calculate the distance
                 let distance = dist(points[from_point_index], points[to_point_index]);
-                console.log("------> distance", distance)
+                // console.log("------> distance", distance)
 
                 graphDistance[from].push(distance);
                 graph[from].push(to);
-                console.log("-------------------------------------")
+                // console.log("-------------------------------------")
             }
-            // else{
-            //     graphDistance[from].push(0);
-            //     graph[from].push(0);
-            // }
         }
         if(graph[i].length < graph.length){
             for(let j = graph[i].length; j < graph.length; j++){
@@ -261,9 +260,9 @@ export function makeVisabilityGraph(graph: Array<Array<any>>, graphDistance: Arr
                 graphDistance[i].push(0)
             }
         }
-        console.log("-----------------------------------xong--------------------------------------", i)
+        // console.log("-----------------------------------xong--------------------------------------", i)
     }
-    console.log('xxxx')
+    // console.log('xxxx')
     return 0;
 }
 /*

@@ -73,6 +73,7 @@ function drawGraph(graph: Array<Array<number>>, points: Array<point>) {
     console.log("plane_start-->", plane_start, "plane_end-->", plane_end)
     for (var i = plane_start; i < plane_end; i++) {
         for (var j = 0; j < graph[i].length; j++) {
+            console.log("i % points.length -->", i % points.length , "---graph[i][j] % points.length-->", graph[i][j] % points.length)
             let from = points[i % points.length];
             let to = points[graph[i][j] % points.length];
             // console.log("from-->", from, "to-->", to)

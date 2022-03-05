@@ -1,6 +1,7 @@
 import { lineSegment, point } from ".";
 
 import  { Queue }   from "./Queue";
+
 //ok
 function readPoint(a: string) {
     if(a != undefined){
@@ -248,16 +249,6 @@ export function makeVisabilityGraph(graph: Array<Array<any>>, graphDistance: Arr
                 graphDistance[from].push(distance);
                 graph[from].push(to);
                 // console.log("-------------------------------------")
-            }
-        }
-        if(graph[i].length < graph.length){
-            for(let j = graph[i].length; j < graph.length; j++){
-                graph[i].push(0)
-            }
-        }
-        if(graphDistance[i].length < graphDistance.length){
-            for(let j = graphDistance[i].length; j < graphDistance.length; j++){
-                graphDistance[i].push(0)
             }
         }
         // console.log("-----------------------------------xong--------------------------------------", i)

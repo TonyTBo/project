@@ -70,10 +70,10 @@ function drawTitle(testTitle: string, distance: any) {
 function drawGraph(graph: Array<Array<number>>, points: Array<point>) {
     var plane_start = ((points.length * config.printLevel) / points.length) * points.length;
     var plane_end = plane_start + points.length;
-    console.log("plane_start-->", plane_start, "plane_end-->", plane_end)
+    // console.log("plane_start-->", plane_start, "plane_end-->", plane_end)
     for (var i = plane_start; i < plane_end; i++) {
         for (var j = 0; j < graph[i].length; j++) {
-            console.log("i % points.length -->", i % points.length , "---graph[i][j] % points.length-->", graph[i][j] % points.length)
+            // console.log("i % points.length -->", i % points.length , "---graph[i][j] % points.length-->", graph[i][j] % points.length)
             let from = points[i % points.length];
             let to = points[graph[i][j] % points.length];
             // console.log("from-->", from, "to-->", to)

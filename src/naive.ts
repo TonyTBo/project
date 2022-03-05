@@ -3,6 +3,7 @@ import { lineSegment, point } from ".";
 import  { Queue }   from "./Queue";
 
 import  { PriorityQueue }   from "./PriorityQueue";
+import  { PriorityQueue1 }   from "./PriorityQueue1";
 
 //ok
 function readPoint(a: string) {
@@ -171,26 +172,27 @@ export function dijkstra(graphDistance: Array<Array<any>>, graph: Array<Array<nu
     //Create a vector to see if we already visited the point
     let visited: Array<boolean> = new Array();
 
-    const pq = new PriorityQueue();
+    const pq = new PriorityQueue1();
     // var pq!: Array<tuple: [number, number, number]>;
 
     let tuple = [0, start, -1];
-    pq.push(tuple);
+    pq.push(tuple, start);
     // console.log("pq berfore -->", pq.length)
 
     while (pq.size() != 0) {
         //@ts-ignore
-        let t: [any, number, number]= pq.top();
+        let t = pq.pop();
 
-        pq.pop();
-        // console.log("pq after -->", pq.length)
+        // pq.pop();
+        console.log("tttt -->", t.key[0])
 
         //How far have we travelled until now
-        let distanceSoFar = -1 * t[0];//0
+        let distanceSoFar = -1 * t.key[0];//0
+        console.log("distanceSoFar -->", distanceSoFar)
 
         //What point are we at
-        let current = t[1];// start: 0
-        let whereFrom = t[2]; //-1
+        let current = t.key[1];// start: 0
+        let whereFrom = t.key[2]; //-1
 
         //If we already visited the current continue
         if (visited[current]) continue;
@@ -209,9 +211,9 @@ export function dijkstra(graphDistance: Array<Array<any>>, graph: Array<Array<nu
             //calculate the complete distance to that current
             let newdistance = distanceSoFar + graphDistance[current][i];
 
-            let newTuple: [any, number, number] = [-1 * newdistance, next, current];
+            let newTuple = [-1 * newdistance, next, current];
 
-            pq.push(newTuple);
+            pq.push(newTuple, newdistance);
         }
     }
     console.log("route--->", route)
@@ -319,3 +321,4 @@ crossesNumber
 [1 0 0 1 0],
 [1 1 0 0 0]]
 */
+

@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<svg viewBox='-5 -55 40 60' xmlns='http://www.w3.org/2000/svg' version='1.1'>
+<circle cx='0' cy='0' r='0.5' fill='#FFA500' />
+<circle cx='30' cy='-40' r='0.5' fill='green' />
+<text x='0' y='-45' font-family='Verdana' font-size='5'>No obsticals, length: 5</text>
+<line x1='0' y1='0' x2='0' y2='0' stroke-width='0.1' stroke='blue'/>
+<line x1='0' y1='0' x2='30' y2='-40' stroke-width='0.1' stroke='blue'/>
+<line x1='30' y1='-40' x2='0' y2='0' stroke-width='0.1' stroke='blue'/>
+<line x1='30' y1='-40' x2='30' y2='-40' stroke-width='0.1' stroke='blue'/>
+<polyline stroke='red' stroke-width='0.2' fill='none' points='30,-40 0,0 '/>
+</svg>
